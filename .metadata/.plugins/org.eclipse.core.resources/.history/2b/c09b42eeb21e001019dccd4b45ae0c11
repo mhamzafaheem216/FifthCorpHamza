@@ -1,0 +1,33 @@
+package com.fifthcorp.Hamza.dto;
+
+import com.fifthcorp.Hamza.entities.Lease;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LeaseDTO {
+
+    private Long leaseId;
+    private String tenantName;
+    private String landlordName;
+    private String unitName;
+    private double rent;
+    private int duration; // In months
+    private String frequency;
+
+    // Constructor to populate the DTO directly from the Lease entity
+    public LeaseDetailsDTO(Lease lease) {
+        this.leaseId = lease.getId();
+        this.tenantName = lease.getTenant().getName();  // Assuming the Tenant class has a getName method
+        this.landlordName = lease.getTenant().getLandlord().getName();  // Assuming Tenant has a linked Landlord
+        this.unitName = lease.getUnit().getName();  // Assuming the Unit class has a getName method
+        this.rent = lease.getRent();
+        this.duration = lease.getDuration();
+        this.frequency = lease.getFrequency();
+    }
+}

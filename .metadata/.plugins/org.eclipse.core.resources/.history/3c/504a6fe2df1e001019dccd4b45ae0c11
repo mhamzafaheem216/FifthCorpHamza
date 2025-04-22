@@ -1,0 +1,31 @@
+package com.fifthcorp.Hamza.sevices;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+import com.fifthcorp.Hamza.entities.Lease;
+import com.fifthcorp.Hamza.repository.LeaseRepository;
+
+@Service
+public class LeaseService {
+
+    @Autowired
+    private LeaseRepository leaseRepository;
+
+    // Create lease by selecting tenant, unit, duration, rent, and frequency
+    public Lease createLease(String obj) {
+        // Save the lease to the database
+        return leaseRepository.save(leaseRequest);
+    }
+
+    // Fetch lease by unitId
+    public Lease getLeaseByUnit(Long unitId) {
+        return leaseRepository.findByUnitId(unitId); 
+    }
+
+    // Fetch all leases
+    public List<Lease> getAllLeases() {
+        return leaseRepository.findAll();  // Fetches all the leases from the database
+    }
+}

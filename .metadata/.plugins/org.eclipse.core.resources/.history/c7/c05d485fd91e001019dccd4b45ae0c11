@@ -1,0 +1,34 @@
+package com.fifthcorp.Hamza.sevices;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.fifthcorp.Hamza.entities.Contact;
+import com.fifthcorp.Hamza.repository.ContactRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ContactService {
+
+    private final ContactRepository contactRepository;
+
+    public List<Contact> getAllContacts() {
+        return contactRepository.findAll();
+    }
+
+    public List<Contact> getContactsByType(String type) {
+        return contactRepository.findByType(type.toUpperCase());
+    }
+
+    public Contact createContact(Contact contact) {
+        return contactRepository.save(contact);
+    }
+
+    public Contact updateContact(Long id, Contact contact) {
+        contact.setId(id);
+        return contactRepository.save(contact);
+    }
+}

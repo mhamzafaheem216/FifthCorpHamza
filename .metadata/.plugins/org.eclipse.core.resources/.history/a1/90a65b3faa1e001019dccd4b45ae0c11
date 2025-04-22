@@ -1,0 +1,44 @@
+package com.fifthcorp.Hamza.controllers;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fifthcorp.Hamza.entities.Unit;
+import com.fifthcorp.Hamza.sevices.UnitService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/hamza/units")
+@RequiredArgsConstructor
+public class UnitController {
+
+    private final UnitService unitService;
+
+    @GetMapping
+    public List<Unit> getAll() {
+        return unitService.getAllUnits();
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public List<Unit> getByOwner(@PathVariable Long ownerId) {
+        return unitService.getUnitsByOwner(ownerId);
+    }
+
+    @PostMapping
+    public Unit create(@RequestBody Unit unit) {
+        return unitService.createUnit(unit);
+    }
+
+    @PutMapping("/{id}")
+    public Unit update(@PathVariable Long id, @RequestBody Unit unit) {
+        return unitService.updateUnit(id, unit);
+    }
+}

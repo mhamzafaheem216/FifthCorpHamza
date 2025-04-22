@@ -1,0 +1,8 @@
+package com.fifthcorp.Hamza.commons;
+
+public class APIEndpoints {
+	public static final String AUTHTOKEN_ENDPOINT = "/hamza/token";
+	public static final String CONTACT_ENDPOINT = "/hamza/contact";
+	public static final String LEASE_ENDPOINT = "/hamza/lease";
+	public static final String UNIT_ENDPOINT = "/hamza/unit";
+}

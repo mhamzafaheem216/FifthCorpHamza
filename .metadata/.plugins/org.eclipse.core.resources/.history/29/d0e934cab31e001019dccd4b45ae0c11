@@ -1,0 +1,5 @@
+package com.fifthcorp.Hamza.dtos;
+
+public class ContactDTO {
+
+}

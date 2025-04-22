@@ -1,0 +1,26 @@
+package com.fifthcorp.Hamza.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.Data;
+
+
+@Entity
+@Data
+public class Unit {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String unitNumber;
+    private String type;
+    private String location;
+    private Double value;
+    private String status; // "Vacant" or "Occupied"
+
+    @ManyToOne
+    private Contact owner; // Must be a landlord
+}

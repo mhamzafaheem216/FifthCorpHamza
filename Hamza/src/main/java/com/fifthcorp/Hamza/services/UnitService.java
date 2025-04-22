@@ -1,0 +1,169 @@
+package com.fifthcorp.Hamza.services;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fifthcorp.Hamza.entities.Contact;
+import com.fifthcorp.Hamza.entities.Unit;
+import com.fifthcorp.Hamza.repository.ContactRepository;
+import com.fifthcorp.Hamza.repository.UnitRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class UnitService {
+    
+    @Autowired
+    ContactRepository contactRepository;
+
+    private final UnitRepository unitRepository;
+
+    public List<Unit> getAllUnits() {
+        return unitRepository.findAll();
+    }
+
+    public List<Unit> getUnitsByOwner(Long ownerId) {
+        return unitRepository.findByOwnerId(ownerId);
+    }
+
+    public Unit createUnit(String obj) {
+        JSONObject jsonObj = new JSONObject(obj);
+        Unit unit = new Unit();
+        
+        unit.setUnitNumber(jsonObj.has("unit_number") ? jsonObj.get("unit_number").toString() : null);
+        unit.setType(jsonObj.has("type") ? jsonObj.get("type").toString() : null);
+        unit.setType(jsonObj.has("location") ? jsonObj.get("location").toString() : null);
+        
+        if (jsonObj.has("value") && !jsonObj.isNull("value")) {
+            try {
+                unit.setValue(jsonObj.getDouble("value"));
+            } catch (Exception e) {
+                throw new RuntimeException("Field 'value' must be a valid number.");
+            }
+        }
+        
+        List<String> availableStatus = Arrays.asList("VACANT", "LEASED");
+        
+        if (jsonObj.has("status") && !jsonObj.isNull("status")) {
+            String status = jsonObj.getString("status").toUpperCase();
+
+            if (!availableStatus.contains(status)) {
+                throw new RuntimeException("Invalid status. Allowed values: " + availableStatus);
+            }
+            unit.setStatus(status);
+        }
+        
+        if (jsonObj.has("owner_id") && !jsonObj.isNull("owner_id")) {
+            long ownerId = jsonObj.getLong("owner_id");
+            Optional<Contact> owner = contactRepository.findById(ownerId);
+
+            if (!owner.isPresent()) {
+                throw new RuntimeException("No contact found with id: " + ownerId);
+            }
+            unit.setOwner(owner.get());
+        }
+
+        return unitRepository.save(unit);
+    }
+    
+    public Unit changeUnitOwner(String obj) {
+   
+    	JSONObject jsonObj = new JSONObject(obj);
+    	
+    	if(!jsonObj.has("unitID")) {
+    		throw new RuntimeException("Unit ID Not Provided");
+    	}
+    	
+    	long unitId = jsonObj.getLong("unitID");
+    	
+        Optional<Unit> unitOpt = unitRepository.findById(unitId);
+        if (!unitOpt.isPresent()) {
+            throw new RuntimeException("No unit found with id: " + unitId);
+        }
+        Unit unit = unitOpt.get();
+        
+        if(!jsonObj.has("ownerID")) {
+    		throw new RuntimeException("Owner ID Not Provided");
+    	}
+    	
+    	long ownerId = jsonObj.getLong("ownerID");
+
+        Optional<Contact> owner = contactRepository.findById(ownerId);
+        if (!owner.isPresent()) {
+            throw new RuntimeException("No contact found with id: " + ownerId);
+        }
+
+        Contact newOwner = owner.get();
+
+        unit.setOwner(newOwner);
+
+        return unitRepository.save(unit);
+    }
+
+
+    public Unit updateUnit(String obj) {
+        
+        JSONObject jsonObj = new JSONObject(obj);
+        
+        if(!jsonObj.has("unitID")) {
+        	throw new RuntimeException("Unit ID not provided");
+        }
+        
+        long unitId = jsonObj.getLong("unitID");
+
+        Optional<Unit> existingUnitOpt = unitRepository.findById(unitId);
+        if (!existingUnitOpt.isPresent()) {
+            throw new RuntimeException("No unit found with id: " + unitId);
+        }
+        Unit existingUnit = existingUnitOpt.get();
+
+        if (jsonObj.has("unit_number") && !jsonObj.isNull("unit_number")) {
+            existingUnit.setUnitNumber(jsonObj.getString("unit_number"));
+        }
+
+        if (jsonObj.has("type") && !jsonObj.isNull("type")) {
+            existingUnit.setType(jsonObj.getString("type"));
+        }
+
+        if (jsonObj.has("location") && !jsonObj.isNull("location")) {
+            existingUnit.setLocation(jsonObj.getString("location"));
+        }
+
+        if (jsonObj.has("value") && !jsonObj.isNull("value")) {
+            try {
+                existingUnit.setValue(jsonObj.getDouble("value"));
+            } catch (Exception e) {
+                throw new RuntimeException("Field 'value' must be a valid number.");
+            }
+        }
+
+        if (jsonObj.has("status") && !jsonObj.isNull("status")) {
+            String status = jsonObj.getString("status").toUpperCase();
+            List<String> availableStatus = Arrays.asList("VACANT", "LEASED");
+
+            if (!availableStatus.contains(status)) {
+                throw new RuntimeException("Invalid status. Allowed values: " + availableStatus);
+            }
+            existingUnit.setStatus(status);
+        }
+
+        if (jsonObj.has("owner_id") && !jsonObj.isNull("owner_id")) {
+            Long ownerId = jsonObj.getLong("owner_id");
+            Optional<Contact> ownerOpt = contactRepository.findById(ownerId);
+
+            if (!ownerOpt.isPresent()) {
+                throw new RuntimeException("No contact found with id: " + ownerId);
+            }
+            existingUnit.setOwner(ownerOpt.get());
+        }
+
+        return unitRepository.save(existingUnit);
+    }
+
+}

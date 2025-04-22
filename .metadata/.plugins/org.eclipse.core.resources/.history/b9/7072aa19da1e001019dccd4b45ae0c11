@@ -1,0 +1,57 @@
+package com.fifthcorp.Hamza.sevices;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.fifthcorp.Hamza.commons.Response;
+import com.fifthcorp.Hamza.dtos.ContactDTO;
+import com.fifthcorp.Hamza.entities.Contact;
+import com.fifthcorp.Hamza.repository.ContactRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ContactService {
+
+    private final ContactRepository contactRepository;
+
+    public List<Contact> getAllContacts() {
+        return contactRepository.findAll();
+    }
+
+    public List<Contact> getContactsByType(String type) {
+        return contactRepository.findByType(type.toUpperCase());
+    }
+
+    public Contact createContact(Object obj) {
+    	JSONObject jsonObj = new JSONObject(obj);
+    	Contact contact = new Contact();
+    	List<String> types = Arrays.asList("TENANT", "LANDLORD");
+    	
+    	if(!jsonObj.has("name") || !jsonObj.has("type")) {
+    		throw new IllegalArgumentException("Missing required fields: name or type");    
+    	}
+    	
+    	if (!types.contains(jsonObj.getString("type").toUpperCase())) {
+    		throw new IllegalArgumentException("Invalid type. Allowed types are TENANT and LANDLORD.");
+    	}
+    	
+    	contact.setName(jsonObj.get("name").toString());
+    	contact.setType(jsonObj.get("type").toString());
+    	contact.setContactInfo(jsonObj.has("contactinfo") ? jsonObj.getString("contactinfo") : null);
+
+    	
+        return contactRepository.save(contact);
+    }
+
+    public Contact updateContact(Long id, Contact contact) {
+        contact.setId(id);
+        return contactRepository.save(contact);
+    }
+}

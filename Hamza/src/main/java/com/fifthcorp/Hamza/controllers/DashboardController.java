@@ -1,0 +1,35 @@
+package com.fifthcorp.Hamza.controllers;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fifthcorp.Hamza.services.DashboardService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@RestController
+@Api(tags = "Dashboard")
+public class DashboardController {
+	
+	@Autowired
+	DashboardService dashboardService;
+
+	 @GetMapping("/hamza/dashboard")
+	 @ApiOperation(value = "Dashboard View")
+	 public ResponseEntity<Map<String, Object>> getDashboardSummary() {
+		        Map<String, Object> dashboardSummary = dashboardService.getDashboardSummary();
+		        return ResponseEntity.ok(dashboardSummary);
+		    }
+	 
+	 @GetMapping("/hamza/summary")
+	 @ApiOperation(value = "Summary", notes = "Fetches the linked test data including unit, lease, tenant, and landlord.")
+	 public ResponseEntity<Map<String, Object>> getTestSummary() {
+	        Map<String, Object> linkedTestData = dashboardService.getLinkedTestData();
+	        return ResponseEntity.ok(linkedTestData);
+	    }
+}

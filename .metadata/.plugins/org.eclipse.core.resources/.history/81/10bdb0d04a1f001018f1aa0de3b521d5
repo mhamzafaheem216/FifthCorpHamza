@@ -1,0 +1,38 @@
+package com.fifthcorp.Hamza.commons;
+
+public class Response {
+    private String message;
+    private Object data;
+
+    // Default constructor
+    public Response() {}
+
+    // Constructor for message only (for error cases)
+    public Response(String message) {
+        this.message = message;
+    }
+
+    // Constructor for message and data (for success cases)
+    public Response(String message, Object data) {
+        this.message = message;
+        this.data = data;
+    }
+
+    // Getter and Setter methods
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+}
+

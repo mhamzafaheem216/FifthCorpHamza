@@ -1,0 +1,7 @@
+package com.fifthcorp.Hamza.commons;
+
+public abstract class APIEndpoints {
+	public static final String CONTACT_ENDPOINT = "/customer";
+	public static final String LEASE_ENDPOINT = "/lease";
+	public static final String UNIT_ENDPOINT = "/unit";
+}

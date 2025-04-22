@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/HamzaDB
+    username: postgres
+    password: hamza123
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10  # Optional, adjust based on your requirements
+  jpa:
+    hibernate:
+      ddl-auto: update  # Use 'update' for development, 'validate' or 'none' for production
+    show-sql: true  # Optional, set to true if you want to see SQL logs in the console
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: always  # Optional, ensures the schema is initialized when the app starts
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG  # Optional, to enable SQL query logging

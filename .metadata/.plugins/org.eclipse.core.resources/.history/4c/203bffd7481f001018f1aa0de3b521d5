@@ -1,0 +1,83 @@
+package com.fifthcorp.Hamza.services;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.fifthcorp.Hamza.entities.Contact;
+import com.fifthcorp.Hamza.entities.Unit;
+import com.fifthcorp.Hamza.repository.ContactRepository;
+import com.fifthcorp.Hamza.repository.UnitRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class DashboardService {
+
+    private final UnitRepository unitRepository;
+    private final ContactRepository contactRepository;
+
+    
+    public Map<String, Object> getUnitStatusSummary() {
+        long totalUnits = unitRepository.count();
+        long vacantUnits = unitRepository.countByStatus("VACANT");
+        long leasedUnits = unitRepository.countByStatus("LEASED");
+
+        Map<String, Object> statusSummary = new HashMap<>();
+        statusSummary.put("totalUnits", totalUnits);
+        statusSummary.put("vacantUnits", vacantUnits);
+        statusSummary.put("leasedUnits", leasedUnits);
+
+        return statusSummary;
+    }
+
+//    // Get list of landlords and how many units they own
+//    public List<Map<String, Object>> getLandlordUnitCount() {
+//        List<Map<String, Object>> landlordSummary = new ArrayList<>();
+//
+//        List<Contact> landlords = contactRepository.findByType("LANDLORD");
+//        for (Contact landlord : landlords) {
+//            long unitCount = unitRepository.countByOwnerId(landlord.getId());
+//            Map<String, Object> landlordData = new HashMap<>();
+//            landlordData.put("landlordName", landlord.getName());
+//            landlordData.put("unitCount", unitCount);
+//            landlordSummary.add(landlordData);
+//        }
+//
+//        return landlordSummary;
+//    }
+//
+//    // Get rent income summary from leased units
+//    public double getLeasedIncomeSummary() {
+//        List<Unit> leasedUnits = unitRepository.findByStatus("LEASED");
+//        double totalRentIncome = 0.0;
+//
+//        for (Unit unit : leasedUnits) {
+//            totalRentIncome += unit.getValue(); // Assuming `value` is the rent income
+//        }
+//
+//        return totalRentIncome;
+//    }
+//
+//    // Get lease info for a test lease
+//    public Unit getTestLeaseInfo() {
+//        // Assuming the test lease is a specific leased unit (e.g., the first leased unit)
+//        return unitRepository.findFirstByStatus("LEASED");
+//    }
+//
+//    // Combine all the dashboard data into one map
+//    public Map<String, Object> getDashboardSummary() {
+//        Map<String, Object> dashboardSummary = new HashMap<>();
+//        dashboardSummary.put("unitStatusSummary", getUnitStatusSummary());
+//        dashboardSummary.put("landlordUnitSummary", getLandlordUnitCount());
+//        dashboardSummary.put("leasedIncomeSummary", getLeasedIncomeSummary());
+//        dashboardSummary.put("testLeaseInfo", getTestLeaseInfo());
+//
+//        return dashboardSummary;
+//    }
+}
+

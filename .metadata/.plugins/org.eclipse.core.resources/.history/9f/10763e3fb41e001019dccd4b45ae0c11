@@ -1,0 +1,13 @@
+package com.fifthcorp.Hamza.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.fifthcorp.Hamza.entities.Lease;
+
+public interface LeaseRepository extends JpaRepository<Lease, Long> {
+    List<Lease> findByTenantId(Long tenantId);
+    List<Lease> findByLandlordId(Long landlordId);
+    Lease findByUnitId(Long unitId);
+}

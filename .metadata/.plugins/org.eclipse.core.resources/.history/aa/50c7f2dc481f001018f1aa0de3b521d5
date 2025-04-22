@@ -1,0 +1,5 @@
+package com.fifthcorp.Hamza.controllers;
+
+public class DashboardController {
+
+}

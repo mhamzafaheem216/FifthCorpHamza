@@ -1,0 +1,5 @@
+package com.fifthcorp.Hamza.repository;
+
+public class ContactRepository {
+
+}

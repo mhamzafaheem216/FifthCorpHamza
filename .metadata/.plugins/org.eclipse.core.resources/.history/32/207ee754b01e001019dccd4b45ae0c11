@@ -1,0 +1,25 @@
+package com.fifthcorp.Hamza.controllers;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fifthcorp.Hamza.commons.APIEndpoints;
+
+@RestController
+@RequestMapping(APIEndpoints.AUTHTOKEN_ENDPOINT)
+public class AuthController {
+
+    @GetMapping
+    public ResponseEntity<Map<String, String>> getToken() {
+        String fakeToken = UUID.randomUUID().toString(); // Just a random string for demo
+        Map<String, String> response = new HashMap<>();
+        response.put("token", fakeToken);
+        return ResponseEntity.ok(response);
+    }
+}

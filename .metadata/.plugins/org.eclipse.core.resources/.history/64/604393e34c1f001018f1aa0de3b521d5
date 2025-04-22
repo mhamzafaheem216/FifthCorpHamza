@@ -1,0 +1,87 @@
+package com.fifthcorp.Hamza.controllers;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fifthcorp.Hamza.commons.APIEndpoints;
+import com.fifthcorp.Hamza.commons.Helper;
+import com.fifthcorp.Hamza.commons.Response;
+import com.fifthcorp.Hamza.entities.Contact;
+import com.fifthcorp.Hamza.services.ContactService;
+
+import io.swagger.annotations.ApiOperation;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping(APIEndpoints.CONTACT_ENDPOINT)
+@RequiredArgsConstructor
+public class ContactController {
+
+    private final ContactService contactService;
+
+    @GetMapping("/fetchAll")
+    @ApiOperation(value = "Fetch All Contacts")
+    public ResponseEntity<Object> getAll(HttpServletRequest request) {
+        if (!Helper.validateToken(request)) {
+            return new ResponseEntity<>(new Response("Unauthorized: Invalid token"), HttpStatus.UNAUTHORIZED);
+        }
+
+        List<Contact> contacts = contactService.getAllContacts();
+        if (contacts.isEmpty()) {
+            return new ResponseEntity<>(new Response("No contacts found"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(contacts, HttpStatus.OK);
+    }
+
+    @GetMapping("/type/{type}")
+    @ApiOperation(value = "Fetch Contact By Type")
+    public ResponseEntity<Object> getByType(@PathVariable String type, HttpServletRequest request) {
+        if (!Helper.validateToken(request)) {
+            return new ResponseEntity<>(new Response("Unauthorized: Invalid token"), HttpStatus.UNAUTHORIZED);
+        }
+
+        List<Contact> contacts = contactService.getContactsByType(type);
+        if (contacts.isEmpty()) {
+            return new ResponseEntity<>(new Response("No contacts found for type: " + type), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(contacts, HttpStatus.OK);
+    }
+    
+        @PostMapping("create")
+        public ResponseEntity<Response> create(@RequestBody String obj, HttpServletRequest request) {
+            if (!Helper.validateToken(request)) {
+                return new ResponseEntity<>(new Response("Unauthorized: Invalid token"), HttpStatus.UNAUTHORIZED);
+            }
+
+            try {
+                Contact createdContact = contactService.createContact(obj);
+                return new ResponseEntity<>(new Response("Contact created successfully", createdContact), HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new Response("Error: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+    // Update an existing contact
+    @PostMapping("/update/{id}")
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody String obj, HttpServletRequest request) {
+        if (!Helper.validateToken(request)) {
+            return new ResponseEntity<>(new Response("Unauthorized: Invalid token"), HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Contact updatedContact = contactService.updateContact(id, obj);
+            return new ResponseEntity<>(updatedContact, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}

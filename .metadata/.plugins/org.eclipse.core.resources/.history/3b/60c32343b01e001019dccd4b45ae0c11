@@ -1,0 +1,19 @@
+package com.fifthcorp.Hamza.commons;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+public class Helper {
+
+    private static JwtUtil jwtUtil = new JwtUtil();
+
+
+    public static boolean validateToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);  // Remove "Bearer " from the token string
+            return jwtUtil.validateToken(token);
+        }
+        return false; // Token not present or malformed
+    }
+}

@@ -1,0 +1,5 @@
+package com.fifthcorp.Hamza.entities;
+
+public class Lease {
+
+}

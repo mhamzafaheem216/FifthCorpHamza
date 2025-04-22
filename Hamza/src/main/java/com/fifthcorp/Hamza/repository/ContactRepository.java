@@ -1,0 +1,13 @@
+package com.fifthcorp.Hamza.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.fifthcorp.Hamza.entities.Contact;
+
+public interface ContactRepository extends JpaRepository<Contact, Long> {
+    List<Contact> findByType(String type); // LANDLORD or TENANT
+    Optional<Contact> findById(Long id);
+}

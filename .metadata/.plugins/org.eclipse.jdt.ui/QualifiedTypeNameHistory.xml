@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.fifthcorp.Hamza.entities.Lease"/>
+    <fullyQualifiedTypeName name="com.fifthcorp.Hamza.entities.Unit"/>
+    <fullyQualifiedTypeName name="io.jsonwebtoken.lang.Collections"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="com.fifthcorp.Hamza.commons.APIEndpoints"/>
+    <fullyQualifiedTypeName name="com.fifthcorp.Hamza.commons.Response"/>
+    <fullyQualifiedTypeName name="com.fifthcorp.Hamza.commons.Helper"/>
+    <fullyQualifiedTypeName name="lombok.Data"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+</qualifiedTypeNameHistroy>

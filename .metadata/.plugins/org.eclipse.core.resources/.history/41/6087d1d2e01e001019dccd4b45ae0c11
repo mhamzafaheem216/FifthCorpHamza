@@ -1,0 +1,88 @@
+package com.fifthcorp.Hamza.services;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fifthcorp.Hamza.entities.Contact;
+import com.fifthcorp.Hamza.entities.Lease;
+import com.fifthcorp.Hamza.entities.Unit;
+import com.fifthcorp.Hamza.repository.ContactRepository;
+import com.fifthcorp.Hamza.repository.LeaseRepository;
+import com.fifthcorp.Hamza.repository.UnitRepository;
+
+@Service
+public class LeaseService {
+
+    @Autowired
+    private LeaseRepository leaseRepository;
+
+    @Autowired
+    private UnitRepository unitRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
+
+    public Lease createLease(String obj) {
+
+        JSONObject jsonObj = new JSONObject(obj);
+        
+        validateLeaseData(jsonObj);
+        Lease lease = new Lease();        
+        Unit unit = unitRepository.findById(jsonObj.getLong("unit_id"))
+                .orElseThrow(() -> new Exception("Invalid unit ID."));
+        lease.setUnit(unit);
+
+        Contact tenant = contactRepository.findById(jsonObj.getLong("tenant_id"))
+                .orElseThrow(() -> new Exception("Invalid tenant ID."));
+        lease.setTenant(tenant);
+
+        Contact landlord = contactRepository.findById(jsonObj.getLong("landlord_id"))
+                .orElseThrow(() -> new Exception("Invalid landlord ID."));
+        lease.setLandlord(landlord);
+
+        lease.setStartDate(LocalDate.parse(jsonObj.getString("start_date")));
+        lease.setDuration(jsonObj.getInt("duration_months"));
+        lease.setRentAmount(jsonObj.getDouble("rent_amount"));
+        lease.setPaymentFrequency(jsonObj.getString("payment_frequency"));
+
+        return leaseRepository.save(lease);
+    }
+
+    private void validateLeaseData(JSONObject jsonObj) {
+        // Validate start date
+        if (!jsonObj.has("start_date") || jsonObj.getString("start_date").isEmpty()) {
+            throw new Exception("Start date is required.");
+        }
+
+        if (!jsonObj.has("duration_months") || jsonObj.getInt("duration_months") <= 0) {
+            throw new Exception("Duration in months must be a positive integer.");
+        }
+
+        if (!jsonObj.has("rent_amount") || jsonObj.getDouble("rent_amount") <= 0) {
+            throw new Exception("Rent amount must be a positive value.");
+        }
+
+        if (!jsonObj.has("payment_frequency") || 
+            !jsonObj.getString("payment_frequency").matches("Monthly|Quarterly|Yearly")) {
+            throw new Exception("Invalid payment frequency. Allowed values are Monthly, Quarterly, or Yearly.");
+        }
+
+        if (!jsonObj.has("unit_id") || !jsonObj.has("tenant_id") || !jsonObj.has("landlord_id")) {
+            throw new Exception("Unit ID, Tenant ID, and Landlord ID are required.");
+        }
+    }
+
+    // Fetch lease by unitId
+    public Lease getLeaseByUnit(Long unitId) {
+        return leaseRepository.findByUnitId(unitId); 
+    }
+
+    // Fetch all leases
+    public List<Lease> getAllLeases() {
+        return leaseRepository.findAll();  // Fetches all the leases from the database
+    }
+}

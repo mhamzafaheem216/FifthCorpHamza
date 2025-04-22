@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/HamzaDB  # Ensure the database name is correct
+    username: postgres  # The username you use to connect to the database
+    password: hamza123  # Replace with your actual password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10  # Optional, adjust based on your requirements
+  jpa:
+    hibernate:
+      ddl-auto: update  # Use 'update' for development, 'validate' or 'none' for production
+    show-sql: true  # Optional, set to true if you want to see SQL logs in the console
+    properties:
+      hibernate:
+        format_sql: true  # Optional, for formatted SQL logs
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG  # Optional, to enable SQL query logging
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Optional, to log SQL parameter bindings

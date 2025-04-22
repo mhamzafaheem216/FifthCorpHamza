@@ -1,0 +1,5 @@
+package com.fifthcorp.Hamza.services;
+
+public class DashboardService {
+
+}

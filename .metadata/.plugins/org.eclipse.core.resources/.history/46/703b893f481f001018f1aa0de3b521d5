@@ -1,0 +1,12 @@
+package com.fifthcorp.Hamza.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.fifthcorp.Hamza.entities.Unit;
+
+public interface UnitRepository extends JpaRepository<Unit, Long> {
+    List<Unit> findByStatus(String status); // VACANT or OCCUPIED
+    List<Unit> findByOwnerId(Long ownerId);
+}

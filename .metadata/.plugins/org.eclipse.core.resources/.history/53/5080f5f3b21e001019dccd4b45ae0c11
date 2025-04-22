@@ -1,0 +1,22 @@
+package com.fifthcorp.Hamza.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LeaseDTO {
+
+    private Long leaseId;
+    private String tenantName;
+    private String landlordName;
+    private String unitName;
+    private double rent;
+    private int duration; // In months
+    private String frequency;
+
+}

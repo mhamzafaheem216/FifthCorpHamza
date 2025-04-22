@@ -1,0 +1,29 @@
+package com.fifthcorp.Hamza.sevices;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.fifthcorp.Hamza.entities.Lease;
+import com.fifthcorp.Hamza.repository.LeaseRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class LeaseService {
+
+    private final LeaseRepository leaseRepository;
+
+    public List<Lease> getAllLeases() {
+        return leaseRepository.findAll();
+    }
+
+    public Lease createLease(Lease lease) {
+        return leaseRepository.save(lease);
+    }
+
+    public Lease getLeaseByUnit(Long unitId) {
+        return leaseRepository.findByUnitId(unitId);
+    }
+}
